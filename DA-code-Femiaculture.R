@@ -94,7 +94,7 @@ input_estimates <- input_estimates %>%
 ####Explanation of the input estimates:####
 
 #The discount rate is essential to determine the better decision option. 
-#It represents the likability of a decision maker to wait for benefits, 
+#It represents the likability of a decision-maker to wait for benefits 
 #that occur after a shorter or longer time period.
 #Here, a discount rate of 1 is used, which is comparably small.
 #The higher the discount rate, the less
@@ -105,7 +105,7 @@ input_estimates <- input_estimates %>%
 #of several farm women or groups of farm women to invest.
 #A higher discount rate would make the status quo intervention more attractive.
 #The duration of investments (see the section showing the cashflow down below)
-#also leads to different willingness of women to invest since smaller
+#also leads to the different willingness of women to invest since smaller
 #time periods demand less waiting for income for poor farm women.
 
 
@@ -212,35 +212,36 @@ decision_function <- function(x, varnames){
 #The value varier function (vv()) is used to vary the variables depending
 #on the years of investment and payouts, leading to a variable time series.
 #var_mean is set as the initial variable that differs by var_CV, the coefficient
-#of variation, which is set within the input parameters. 
+#of variation, which is set within the input parameters.
 #Its value is given in percentage.
 #n is the number of produced values, meaning the length of time for the
-#initial variable var_mean, for example "SQ_Husband_Workforce_investment".
-#In this example husbands also invest into their wives health care and
-#food supply. Investment duration is calculated to be three months until 
-#Empowerment pathway payouts can be expected. So, n in this case is
-#"investment_months". The "Empowerment_Workforce_payout" variable, representing
-#the achieved outcome of the investment on the other hand, contains 
-#n = payout_months, since the variable should vary around the 9 months
-#of outcome, and not the three month of investment.
-
+#initial variable var_mean, for example, "SQ_Husband_Workforce_investment."
+#In this example, husbands also invest in their wives' health care and
+#food supply. The investment duration is calculated to be three months until
+#Empowerment pathway payouts can be expected. So, n, in this case, is
+#"investment_months." The "Empowerment_Workforce_payout" variable, representing
+#the achieved outcome of the investment, on the other hand, contains
+#n = payout_months.
+#This is because the variable should vary around the nine months
+#of the outcome and not the three months of investment.
+  
 ###Explanation of the chance_event function###
   
 #The chance_event function (chance_event()) models a risk, here safety.
-#It is based on the binomial distribution 0 and 1 and randomly 
+#It is based on the binomial distribution 0 and 1, and randomly 
 #assigns values to each of the 10.000 model runs.
-#There two parts of the risk are present: One for the investment and one 
+#Two parts of the risk are present: One for the investment and one 
 #for the payout. This is considered because "n" is the number
-#of risk simulations and should differ between the three month phase of 
-#investments and the nine month phase of payouts.
-#the "change" is the input parameter, that defines the percentage of the risk to
-#occur. Here it is set high with 50%. Half of the time, empowerment is seen as 
-#too risky for women.
+#of risk simulations and should differ between the three-month phase of 
+#investments and the nine-month phase of payouts.
+#the "change" is the input parameter that defines the percentage of the risk to
+#occur. Here it is set high at 50%. This calculation
+#estimates empowerment as too risky for women half of the time.
 #The risk is later applied to all elements independently. Social and 
 #inner-household pressure can occur at each step of empowerment,
-#ending the process. The entire pathway is disrupted if the risk occurs.
-#The exclusion of this rule are investments into resources and workforce.
-#It is not clear if women might keep the resources for themselves and have to 
+#ending the process. The entire pathway disrupts if the risk occurs.
+#The exclusion of this rule is investments into resources and the workforce.
+#It is unclear if women might keep the resources for themselves and have to 
 #pay for their husbands to gather assets, but it is mostly seen
 # as safe to buy them.
 #Especially within the empowerment pathway, buying with her own money is 
@@ -259,27 +260,28 @@ decision_function <- function(x, varnames){
            + SQ_Husband_Workforce_investment
   Profit_SQ <- (PartA -PartB)
   
-#It can be dangerous to use the money for herself, instead of the family.
+#It can be dangerous to use the money for herself instead of the family.
 #Women might be dependent on their husbands for health care and food. 
-#This calculation shows how much money a woman would in the end
+#This calculation shows how much money a woman would, in the end
 #have for health care and food investments (= workforce investment).
 #A woman has no guarantee that her husband is paying for her food and health
-#care. So there is a risk to this. Also there is no guarantee that she is
-#allowed to benefit from her investments into resources and health care 
+#care. So there is a risk to this. Also, there is no guarantee that she is
+#allowed to benefit from her investments in resources and healthcare 
 #(workforce) or if she has to give the money to her husband for his own 
 #spending instead.
 #Investing itself might be seen as threatening by men in some situations,
-#but most literature describes it as a safe action. In this scenario it is seen
+#but most literature describes it as a safe action. In this scenario, it is seen
 #as a safe action.
-#It also is not clear if the woman is allowed to invest into
-#health and additional food & nutrition supply. But rather than investing,
+#It also is unclear if the woman is allowed to invest in
+#health and additional food & nutrition supply. However, rather than investing,
 #receiving is dangerous.
 #Investments into resources like cattle can be done, but not always will the
 #woman be allowed to keep the payout. A cattle might be seen as her husband's 
-#income resource once it entered the farm. She might also be not able to
-#harvest her own crops if her husband's crops are in need for labor.
-#also, investing into resources for herself can be threatening for husbands 
-#as well.
+#income resource once it enters the farm. She might also be unable to
+#harvest her own crops if her husband's crops require labor.
+#Investing in resources for herself can also threaten her husband's
+#masculinity.
+  
   
 #Computing the Status Quo NPV (Net present value)#
   
@@ -301,24 +303,23 @@ decision_function <- function(x, varnames){
   Empowerment_profit <-  (PartA - PartB)
   
 ##Risk explanation##  
-#Safety risks occur for all part of payouts. 
-#Having her own money and not giving it to the husband or family might also
-#be a risk for violence. 
-
-#Husband's investment into food and health care (workforce investment)
-#might be smaller within the empowerment pathway than status quo. 
-#Also like in the status quo scenario, it is not save that the husband will
+#Safety risks occur for all parts of payouts. 
+#Having her own money and not giving it to her husband or family might
+#also be a risk for violence. 
+  
+#Husband's investment into the food and health care (workforce investment)
+#might be smaller within the empowerment pathway than the status quo. 
+#Also, like in the status quo scenario, it is not safe that the husband will
 #invest.
   
-#Investments into resources like cattle can be done, but not always will the
-#woman be allowed to keep the payout. A cattle might be seen as her husband's 
-#income resource once it entered the farm. She might also be not able to
-#harvest her own crops if her husband's crops are in need for labor.
-#also, investing into resources for herself can be threatening for husbands 
+#Investments into resources like cattle can be done, but not always will 
+#the woman be allowed to keep the payout. A cattle might be seen as her 
+#husband's income resource once it enters the farm. She might also be unable to
+#harvest her own crops if her husband's crops require labor.
+#also, investing in resources for herself can be threatening to her husband 
 #as well.
-  
-#Investing into Education and Economy might be dangerous, since women are
-#leaving their homes and duties for longer times.
+#Investing into education and their economic opportunities might be 
+#dangerous since women are leaving their homes and duties for longer times.
    
 #Computing the Empowerment NPV (Net present value)#
   
@@ -354,9 +355,9 @@ mcSimulation_results <- decisionSupport::mcSimulation(
 ####Plot NPV distributions####
 
 #Plot Net Present Value (NPV) distributions
-#NPVs show the overall monetary output value of a decision option.
+#NPVs show the overall economic output value of a decision option.
 #By using the plot_distributions() function, both decisions or
-#each seperately can be plottet.
+#each separately can be plotted.
 #The expected NPV for one decision option
 #represents an overlay of the full results of the 
 #Monte Carlo simulation.
@@ -370,8 +371,8 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
                                     base_size = 7)
 #plot both
 decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
-                                    vars = c("NPV_decision_profit_with_Empowerment",
-                                             "NPV_no_empowerment_branch"),
+                                vars = c("NPV_decision_profit_with_Empowerment",
+                                         "NPV_no_empowerment_branch"),
                                     method = 'smooth_simple_overlay', 
                                     base_size = 7)
 
@@ -381,8 +382,8 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
                                      method = 'boxplot_density')
 
 decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
-                                    vars = "NPV_decision_profit_with_Empowerment",
-                                    method = 'boxplot_density')
+                                  vars = "NPV_decision_profit_with_Empowerment",
+                                  method = 'boxplot_density')
 
 
 ####Boxplots####
@@ -403,21 +404,23 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
 
 ####Cashflow analysis####
 
-#Here the plot_cashflow() function is used with the outputs from the
+#Here, the plot_cashflow() function is used with the outputs from the
 #mcSimulation() function.
-#The cashflow represents the history of the simulated intervention period. 
-#The cashflow plot is visualizing the time structure of investments and payouts
-#During 3 months of investments into education, economic progress and resource
-#allocation, 9 months of paybacks are expected. Of course, 
+#The cash flow represents the history of the simulated intervention period. 
+#The cashflow plot visualizes the time structure of investments and payouts
+#During three months of investments into education,
+#economic progress, and resource
+#allocation, nine months of paybacks are expected. Of course, 
 #this is only a simulation of a possible scenario. 
-#The time period can and should be adapted to the local situation
+#Scientists can and should adapt the period to the local situation
 #by setting different input estimates.
 #Looking at these input estimates, a substantial gain by choosing the 
-#decision to empower is estimated. Few months of investment should lead to 
-#larger economic gain. For poor women with less money, it always need to be 
+#decision to empower is estimated. A few months of investment should lead to 
+# a larger economic gain. For poor women with less money, it always needs to be 
 #considered how long an investment period can be without negative impacts 
-#on her and her childrens' lives. So, in this example a monthly measurement
-#(n_months) is used,  but depending on the local situation,
+#on her and her children's lives. So,
+#this example includes, a monthly measurement
+#(n_months),  but depending on the local situation,
 #a yearly measurement (n_years) could also be useful.
 
 
@@ -449,19 +452,20 @@ Cashflow
 #names(mcSimulation_results$y)[n] can be used to select the correct resultName.
 
 
-#The output are the determined Variable 
+#The output is the determined Variable 
 #Importance in the Projection (VIP) score, shown in a bar graph, 
 #and coefficients of a Projection to Latent Structures (PLS) regression model.
-#So, the plots show the variables which the model is more sensitive to. These
-#variables have the most exaggerated impact on the decision outcome and are the
+# The plots show the variables to which the model is more sensitive. These
+#variables have the most exaggerated impact on the decision outcome. 
+#Furthermore, they are the
 #most correlated with the outcome.
-#The VIP shows the importance of the variables with a correlation of the output.
+#The VIP shows the importance of the variables with a correlation to the output.
 #In the plot, positive and negative values
-#are visualized in comparison to the baseline option.
-#Red colors indicates negative values and a green colors positive ones.
+#are visualized compared to the baseline option.
+#Red colors indicate negative values and green colors positive ones.
 #A positive value is not 
 #only positive compared to the baseline, but also 
-#is positively related to the outcome. Sane is true for a negative value:
+#is positively related to the outcome. Sane is valid for a negative value:
 #It is negative compared to the baseline and negatively related to the outcome.
 
 names(mcSimulation_results$x)
@@ -473,9 +477,9 @@ names(mcSimulation_results$y)
 #into health care and food which then lead to more working hours per month 
 #compared to doable working hours with having less food and health care.
 #This is the most important variable in this decision scenario, leading to 
-#higher payouts than investments.This variable has a positive importance to the 
+#higher payouts than investments. This variable has positive importance to the 
 #outcome.
-#This shows, that the empowerment pathway in this scenario would be 
+# In Concluding, the empowerment pathway in this scenario would be 
 #very beneficial. 
 #No negative value is shown in this plot.
 
@@ -502,15 +506,15 @@ plot_pls(pls_result_1, threshold = 0.8, input_table = input_estimates)
 ####EVPI####
 
 #The last part of this code is meant to guide further research.
-#The Expected Value of Perfect Information analysis (EVPI) visualizes variables,
-#further research could be useful on to make better informed decisions in the
+#The Expected Value of Perfect Information analysis (EVPI) visualizes variables.
+#Further research could help make better-informed decisions in the
 #future. Farm women might benefit from reduced uncertainties of the plotted
-#variables since more perfect information benefits more informed decision making.
+#variables since more perfect information benefits more informed decision-making.
 #Without perfect information of the plotted variables, the farm women
 #might suffer from opportunity losses.
 
 #The EVPI is calculated as the amount of money a decision-maker should pay to
-#receive better information about highly uncertain variables and to
+#receive better information about highly uncertain variables and 
 #still profit.
 #If upper and lower input estimate ranges are not broad,
 #it is unlikely that an EVPI is
