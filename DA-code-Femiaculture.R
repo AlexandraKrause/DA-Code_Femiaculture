@@ -255,9 +255,10 @@ decision_function <- function(x, varnames){
   
   PartA <- (SQ_Workforce_payout
            + SQ_Resources_payout)*safety_payout
-  PartB <- SQ_Resources_investment 
-           + SQ_Workforce_investment 
-           + SQ_Husband_Workforce_investment
+  PartB1 <- SQ_Resources_investment 
+  PartB2 <- (SQ_Workforce_investment 
+           + SQ_Husband_Workforce_investment)*safety_inv
+  PartB <- PartB1 + PartB2
   Profit_SQ <- (PartA -PartB)
   
 #It can be dangerous to use the money for herself instead of the family.
@@ -269,18 +270,22 @@ decision_function <- function(x, varnames){
 #allowed to benefit from her investments in resources and healthcare 
 #(workforce) or if she has to give the money to her husband for his own 
 #spending instead.
-#Investing itself might be seen as threatening by men in some situations,
-#but most literature describes it as a safe action. In this scenario, it is seen
-#as a safe action.
-#It also is unclear if the woman is allowed to invest in
-#health and additional food & nutrition supply. However, rather than investing,
-#receiving is dangerous.
+#Investing in agricultural resources
+#itself might be seen as threatening by men in some situations,
+#but most literature describes it as a safe action,
+#since the husband can keep the bought resources fully or partly to himself.
 #Investments into resources like cattle can be done, but not always will the
 #woman be allowed to keep the payout. A cattle might be seen as her husband's 
 #income resource once it enters the farm. She might also be unable to
 #harvest her own crops if her husband's crops require labor.
-#Investing in resources for herself can also threaten her husband's
-#masculinity.
+#In this scenario, it is seen as a safe action.
+#It also is unclear if the woman is allowed to invest in
+#health and additional food & nutrition supply. 
+#Investing demands the transport to a doctor, which can be dangerous or 
+#using land to plant nutritious plants, which her
+#husband might disapprove of. Therefore here it is calculated as a potentially
+#dangerous action.
+
   
   
 #Computing the Status Quo NPV (Net present value)#
@@ -292,9 +297,10 @@ decision_function <- function(x, varnames){
   
   PartA <- (Economy_payout
            + Empowerment_Resources_payout  
-           + Empowerment_Workforce_payout)*safety_payout
+           + Empowerment_Workforce_payout
+           + Empowerment_Workforce_investment)*safety_payout
   PartB1 <- Empowerment_Resources_investment  
-           + Empowerment_Workforce_investment
+           
   PartB2 <- (Education_investment + Economy_investment
             + Husband_Empowerment_Workforce_investment)*safety_inv
   
@@ -306,23 +312,25 @@ decision_function <- function(x, varnames){
 #Safety risks occur for all parts of payouts. 
 #Having her own money and not giving it to her husband or family might
 #also be a risk for violence. 
-  
+
+
 #Husband's investment into the food and health care (workforce investment)
 #might be smaller within the empowerment pathway than the status quo. 
 #Also, like in the status quo scenario, it is not safe that the husband will
 #invest.
-  
-#Investments into resources like cattle can be done, but not always will 
+
+#Investments into resources like cattle can be done without facing danger, 
+#but not always will 
 #the woman be allowed to keep the payout. A cattle might be seen as her 
 #husband's income resource once it enters the farm. She might also be unable to
 #harvest her own crops if her husband's crops require labor.
-#also, investing in resources for herself can be threatening to her husband 
+#Investing in resources for herself can be threatening to her husband 
 #as well.
 #Investing into education and their economic opportunities might be 
 #dangerous since women are leaving their homes and duties for longer times.
-   
-#Computing the Empowerment NPV (Net present value)#
+
   
+#Computing the Empowerment NPV (Net present value)#
   
   
   NPV_Empowerment_profit <- discount(Empowerment_profit,
@@ -359,10 +367,8 @@ mcSimulation_results <- decisionSupport::mcSimulation(
 #By using the plot_distributions() function, both decisions or
 #each separately can be plotted.
 #The expected NPV for one decision option
-#represents an overlay of the full results of the 
-#Monte Carlo simulation.
-#The x-axis shows the monetary range
-#farm women can expect for either option.
+#represents an overlay of the full results of the Monte Carlo simulation.
+#The x-axis shows the monetary range farm women can expect for either option.
 
 #Plot empowerment pathway
 decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
@@ -409,17 +415,17 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
 #The cash flow represents the history of the simulated intervention period. 
 #The cashflow plot visualizes the time structure of investments and payouts
 #During three months of investments into education,
-#economic progress, and resource
-#allocation, nine months of paybacks are expected. Of course, 
-#this is only a simulation of a possible scenario. 
+#economic progress, and resource 
+#allocation, nine months of paybacks are expected. 
+#Of course, this is only a simulation of a possible scenario. 
 #Scientists can and should adapt the period to the local situation
 #by setting different input estimates.
 #Looking at these input estimates, a substantial gain by choosing the 
 #decision to empower is estimated. A few months of investment should lead to 
 # a larger economic gain. For poor women with less money, it always needs to be 
 #considered how long an investment period can be without negative impacts 
-#on her and her children's lives. So,
-#this example includes, a monthly measurement
+#on her and her childrens' lives. 
+#So, this example includes, a monthly measurement
 #(n_months),  but depending on the local situation,
 #a yearly measurement (n_years) could also be useful.
 
