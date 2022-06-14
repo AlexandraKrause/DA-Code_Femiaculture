@@ -224,6 +224,8 @@ decision_function <- function(x, varnames){
 #n = payout_months.
 #This is because the variable should vary around the nine months
 #of the outcome and not the three months of investment.
+
+# Here, the coefficient of variation is set to 1 (var_cv = var_slight).
   
 ###Explanation of the chance_event function###
   
