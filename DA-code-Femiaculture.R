@@ -4,7 +4,7 @@ library (DiagrammeR)
 library(tidyverse)
 library(readxl)
 
-# "SQ" stands for "Status Quo" within this code
+# "SQ" stands for "Status quo" within this code
 
 ####Input data####
 
@@ -129,6 +129,8 @@ decision_function <- function(x, varnames){
                                 one_draw =TRUE)
   safety_inv <- chance_event(safety_risk, 1, 0, n = investment_months,
                              one_draw =TRUE)
+  safety_inv_sq <- chance_event(safety_risk, 1, 0, n = payout_months,
+                             one_draw =FALSE)
   
   #Education
   Education_investment_A <-Education_investment * (1-safety_inv)
@@ -194,12 +196,17 @@ decision_function <- function(x, varnames){
                            var_CV = var_slight, 
                            n = payout_months))
   
-  # Husband's investment
-  SQ_Husband_Workforce_investment <- c( vv(var_mean = 
-                                     SQ_Husband_Workforce_investment, 
-                                     var_CV = var_slight, 
-                                     n = investment_months),
-                                     rep(0,payout_months))
+  # Husband's investment: Here, the wife is not paying herself.
+  # Instead, a husband is sharing his money with the family, including her, for
+  # the resources food and health care. Therefore, it is calculated as an 
+  # additional payoff.
+  
+  SQ_Husband_Workforce_investment <-  c(rep (0,investment_months),
+                                        vv(var_mean = 
+                                             SQ_Husband_Workforce_investment, 
+                                           var_CV = var_slight, 
+                                           n = payout_months))
+
   
   Husband_Empowerment_Workforce_investment <- c(rep (0,investment_months),
                                       vv(var_mean = 
@@ -249,17 +256,20 @@ decision_function <- function(x, varnames){
 #Especially within the empowerment pathway, buying with her own money is 
 #considered safer than other parts of the model.
 
+#safety_inv_sq is set to one_draw =FALSE, since it only occurs for one element
+#within the vector: PartB2 <- (SQ_Workforce_investment)*safety_inv_sq
+  
 ####Pathway calculations####  
-###Computing the decision and Status Quo pathways###
-#1 existent Branch: Status Quo pathway vs. Empowerment pathway#
+###Computing the decision and status quo pathways###
+#1 existent Branch: Status quo pathway vs. empowerment pathway#
   
 ##Status Quo pathway##
   
   PartA <- (SQ_Workforce_payout
-           + SQ_Resources_payout)*safety_payout
+           + SQ_Resources_payout
+           + SQ_Husband_Workforce_investment)*safety_payout
   PartB1 <- SQ_Resources_investment 
-  PartB2 <- (SQ_Workforce_investment 
-           + SQ_Husband_Workforce_investment)*safety_inv
+  PartB2 <- (SQ_Workforce_investment)*safety_inv_sq
   PartB <- PartB1 + PartB2
   Profit_SQ <- (PartA -PartB)
   
@@ -300,11 +310,12 @@ decision_function <- function(x, varnames){
   PartA <- (Economy_payout
            + Empowerment_Resources_payout  
            + Empowerment_Workforce_payout
-           + Empowerment_Workforce_investment)*safety_payout
+           + Husband_Empowerment_Workforce_investment)*safety_payout
+  
   PartB1 <- Empowerment_Resources_investment  
-           
+  
   PartB2 <- (Education_investment + Economy_investment
-            + Husband_Empowerment_Workforce_investment)*safety_inv
+            + Empowerment_Workforce_investment)*safety_inv
   
   PartB <- PartB1 + PartB2
   
