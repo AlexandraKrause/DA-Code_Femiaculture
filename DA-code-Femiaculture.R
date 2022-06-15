@@ -406,7 +406,7 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
 ####Boxplots####
 
 #By using the plot_distributions() function,
-#also the decision's boxplots can be plottet.
+#also the decision's boxplots can be plotted.
 #Boxplots show the median (central line), 
 #the 25th and 75th percentiles (sides of boxes) and any outliers 
 #(light circles outside of boxes).
@@ -488,16 +488,16 @@ Cashflow
 names(mcSimulation_results$x)
 names(mcSimulation_results$y)
 
-#By using the existing input estimates, 
-#Empowerment workforce payout(Dollar/Month), the monetary value achieved by
-#gathering money from the last step of the empowerment pathway, the investments
-#into health care and food which then lead to more working hours per month 
-#compared to doable working hours with having less food and health care.
-#This is the most important variable in this decision scenario, leading to 
-#higher payouts than investments. This variable has positive importance to the 
-#outcome.
-# In Concluding, the empowerment pathway in this scenario would be 
-#very beneficial. 
+#By using the existing input estimates,
+#Empowerment workforce payout (Dollar/Month),
+#the monetary value achieved by gathering money from the last step
+#of the empowerment pathway, the investments into health care and food
+#which then lead to more working hours per month compared to doable
+#working hours with having less food and health care.
+#This is the most important variable in this decision scenario,
+#leading to higher payouts than investments. This variable has
+#positive importance to the outcome.
+#Concluding, the empowerment pathway in this scenario would be very beneficial.
 #No negative value is shown in this plot.
 
 
@@ -522,7 +522,7 @@ plot_pls(pls_result_1, threshold = 0.8, input_table = input_estimates)
 
 ####EVPI####
 
-#The last part of this code is meant to guide further research.
+#This last part of this code is meant to guide further research.
 #The Expected Value of Perfect Information analysis (EVPI) visualizes variables.
 #Further research could help make better-informed decisions in the
 #future. Farm women might benefit from reduced uncertainties of the plotted
