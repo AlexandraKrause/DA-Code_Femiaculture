@@ -3,18 +3,16 @@ library(decisionSupport)
 library (DiagrammeR)
 library(tidyverse)
 library(readxl)
-library(msm)
 
 # "SQ" stands for "Status quo" within this code
 
 ####Input data####
 
-input_estimates <- data.frame(variable = c(
-                                     "Education_investment",
+input_estimates <- data.frame(variable = c("Education_investment",
                                      "Economy_investment", "Economy_payout",
-                                     "SQ_Resources_investment",
+                                     "SQ_Resources_investment", 
                                      "SQ_Resources_payout",
-                                     "Empowerment_Resources_investment",
+                                     "Empowerment_Resources_investment", 
                                      "Empowerment_Resources_payout",
                                      "SQ_Workforce_investment",
                                      "SQ_Workforce_payout",
@@ -25,16 +23,16 @@ input_estimates <- data.frame(variable = c(
                                      "var_slight", "discount_rate",
                                      "payout_months", "investment_months",
                                      "safety_risk"),
-                              lower = c(1,1,5,2,2,5,30,1,5,2,8,1,0.1,
-                                        1,1,9,3,0.05),
+                              lower = c(10,1,50,30,20,30,200,50,30,50,300,50,10,
+                                        1,1,9,3,0.5),
                               median = NA,
-                              upper = c(300,80,800,50,100,400,1000,20,100,40,
-                                        800,100,50,1,1,9,3,0.05),
-                              distribution = c("lnorm","lnorm","lnorm",
-                                               "lnorm","lnorm","lnorm",
-                                               "lnorm","lnorm","lnorm",
-                                               "lnorm","lnorm","lnorm",
-                                               "lnorm",
+                              upper = c(50,20,200,100,90,100,300,100,100,100,
+                                        1000,100,50,1,1,9,3,0.5),
+                              distribution = c("posnorm","posnorm","posnorm",
+                                               "posnorm","posnorm","posnorm",
+                                               "posnorm","posnorm","posnorm",
+                                               "posnorm","posnorm","posnorm",
+                                               "posnorm",
                                                "const","const","const","const",
                                                "const"),
                               label = c("Education investment (Dollar/Month)",
@@ -81,16 +79,16 @@ input_estimates <- input_estimates %>%
          Description = as.character(Description))
 
 #alternative code for using the excel sheet
-# input_table <-read_excel("scientists-given-prior-for-the-website_new.xlsx")
-# 
-# input_table <- input_table %>% 
-#   mutate(Description = as.character(Description),
-#          label = as.character(label),
-#          variable = as.character(variable),
-#          distribution = as.character(distribution),
-#          lower = as.numeric(lower),
-#          median = as.numeric(median),
-#         upper = as.numeric(upper))
+#input_table <-read_excel("inputs-femiaculture.xlsx")
+
+#input_table <- input_table %>% 
+#  mutate(Description = as.character(Description),
+#         label = as.character(label),
+#         variable = as.character(variable),
+#         distribution = as.character(distribution),
+#         lower = as.numeric(lower),
+#         median = as.numeric(median),
+#        upper = as.numeric(upper))
 
 
 ####Explanation of the input estimates:####
@@ -127,34 +125,30 @@ input_estimates <- input_estimates %>%
 decision_function <- function(x, varnames){
   
   #Risk
-  # safety_payout <- chance_event(safety_risk, 1, 0, n = payout_months, 
-  #                               one_draw =FALSE)
-  # safety_inv <- chance_event(safety_risk, 1, 0, n = investment_months,
-  #                            one_draw =FALSE)
-  safety <- chance_event((1-safety_risk), 1, 0, n = (payout_months + investment_months))
+  safety_payout <- chance_event(safety_risk, 1, 0, n = payout_months, 
+                                one_draw =FALSE)
+  safety_inv <- chance_event(safety_risk, 1, 0, n = investment_months,
+                             one_draw =FALSE)
 
   #Education
-
-  Education_investment <- c(vv(var_mean = Education_investment, 
+  Education_investment_A <-Education_investment * (1-safety_inv)
+  
+  Education_investment <- c(vv(var_mean = Education_investment_A, 
                           var_CV = var_slight, 
                           n = investment_months), rep(0,payout_months))
-  
-  Education_investment <- Education_investment * safety
   #Economy
-
-  Economy_payout <- c(rep(0,investment_months), 
-                    vv(var_mean = Economy_payout, 
+  Economy_payout_A <- Economy_payout * (1-safety_payout)
+  
+  Economy_payout <- c(rep (0,investment_months), 
+                    vv(var_mean = Economy_payout_A, 
                     var_CV = var_slight, 
                     n = payout_months))
   
-  Economy_payout <- Economy_payout * safety
+  Economy_investment_A <- Economy_investment * (1-safety_inv)
   
-  
-  Economy_investment <- c(vv(var_mean = Economy_investment, 
+  Economy_investment <- c(vv(var_mean = Economy_investment_A, 
                         var_CV = var_slight, 
-                        n = investment_months), rep(0, payout_months))
-  
-  Economy_investment <- Economy_investment * safety
+                        n = investment_months), rep(0,payout_months))
 
   #Status Quo Resources
   SQ_Resources_investment <- c(vv(var_mean = SQ_Resources_investment, 
@@ -165,25 +159,21 @@ decision_function <- function(x, varnames){
                          vv(var_mean = SQ_Resources_payout, 
                          var_CV = var_slight, 
                          n = payout_months))
-  
   #Empowerment Resources
   Empowerment_Resources_investment <- c(vv(var_mean = 
                                       Empowerment_Resources_investment, 
                                       var_CV = var_slight, 
                                       n = investment_months), 
                                       rep(0,payout_months))
-
+  
   Empowerment_Resources_payout <- c(rep (0,investment_months),
                                   vv(var_mean = Empowerment_Resources_payout, 
                                   var_CV = var_slight, 
                                   n = payout_months))
-  
-  Empowerment_Resources_payout <- Empowerment_Resources_payout * safety
-  
   #Status Quo monthly Workforce
-
+  SQ_Workforce_investment_A <-  SQ_Workforce_investment * (1-safety_inv)
   
-  SQ_Workforce_investment <- c( vv(var_mean = SQ_Workforce_investment, 
+  SQ_Workforce_investment <- c( vv(var_mean = SQ_Workforce_investment_A, 
                              var_CV = var_slight, 
                              n = investment_months), 
                              rep(0,payout_months))
@@ -194,21 +184,15 @@ decision_function <- function(x, varnames){
                          n = payout_months))
 
   #Empowerment monthly Workforce
-  
-  
   Empowerment_Workforce_investment <- c( vv(var_mean = 
                                               Empowerment_Workforce_investment, 
                                 var_CV = var_slight, 
                                 n = investment_months), rep(0,payout_months))
   
-  Empowerment_Workforce_investment <- Empowerment_Workforce_investment * safety
-  
   Empowerment_Workforce_payout <- c(rep (0,investment_months),
                         vv(var_mean = Empowerment_Workforce_payout, 
                            var_CV = var_slight, 
                            n = payout_months))
-  
-  Empowerment_Workforce_payout <- Empowerment_Workforce_payout * safety
   
   # Husband's investment: Here, the wife is not paying herself.
   # Instead, a husband is sharing his money with the family, including her, for
@@ -227,8 +211,6 @@ decision_function <- function(x, varnames){
                                       Husband_Empowerment_Workforce_investment, 
                                       var_CV = var_slight, 
                                       n = payout_months))
-  
-  Husband_Empowerment_Workforce_investment <- Husband_Empowerment_Workforce_investment * safety
   
 ### Explanation of the value varier function (vv())###
   
@@ -281,11 +263,11 @@ decision_function <- function(x, varnames){
   
 ##Status Quo pathway##
   
-  PartA <- SQ_Workforce_payout
+  PartA <- (SQ_Workforce_payout
            + SQ_Resources_payout
-           + SQ_Husband_Workforce_investment
+           + SQ_Husband_Workforce_investment)*safety_payout
   PartB1 <- SQ_Resources_investment 
-  PartB2 <- SQ_Workforce_investment
+  PartB2 <- (SQ_Workforce_investment)*safety_inv
   PartB <- PartB1 + PartB2
   Profit_SQ <- (PartA -PartB)
   
@@ -323,15 +305,15 @@ decision_function <- function(x, varnames){
   
 ##Empowerment pathway##
   
-  PartA <- Economy_payout
+  PartA <- (Economy_payout
            + Empowerment_Resources_payout  
            + Empowerment_Workforce_payout
-           + Husband_Empowerment_Workforce_investment
+           + Husband_Empowerment_Workforce_investment)*safety_payout
   
   PartB1 <- Empowerment_Resources_investment  
   
-  PartB2 <- Education_investment + Economy_investment
-            + Empowerment_Workforce_investment
+  PartB2 <- (Education_investment + Economy_investment
+            + Empowerment_Workforce_investment)*safety_inv
   
   PartB <- PartB1 + PartB2
   
@@ -583,4 +565,3 @@ colnames(mcSimulation_results$y)
 ?input$slider
 ?multi_EVPI
 ?vv()
-
