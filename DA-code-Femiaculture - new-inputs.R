@@ -310,8 +310,6 @@ decision_function <- function(x, varnames){
 #Also, women are hold back by society to give birth in a hospital
 #or get save abortions. A man might prevent her from contraceptive usage.
   
-#safety_inv_sq is set to one_draw =FALSE, since it only occurs for one element
-#within the vector: PartB2 <- (SQ_Workforce_investment)*safety_inv_sq
   
 ####Pathway calculations####  
 ###Computing the decision and status quo pathways###
@@ -460,6 +458,7 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
 
 summary(mcSimulation_results$y$NPV_decision_profit_with_Empowerment)
 summary(mcSimulation_results$y$NPV_no_empowerment_branch)
+
 ####Boxplots####
 
 #By using the plot_distributions() function,
@@ -469,6 +468,7 @@ summary(mcSimulation_results$y$NPV_no_empowerment_branch)
 #(light circles outside of boxes).
 
 #'boxplot' empowerment pathway
+
 decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
                       vars = c("NPV_decision_profit_with_Empowerment"
                                     ),
