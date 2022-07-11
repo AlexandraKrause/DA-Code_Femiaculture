@@ -162,21 +162,21 @@ decision_function <- function(x, varnames){
                     n = payout_months))
   
   
-  #Economy_payout <- Economy_payout * safety
+  Economy_payout <- Economy_payout * safety
   
   
   Economy_investment <- c(vv(var_mean = Economy_investment, 
                         var_CV = var_slight, 
                         n = investment_months), rep(0, payout_months))
   
-  #Economy_investment <- Economy_investment * safety
+  Economy_investment <- Economy_investment * safety
 
   #Status Quo Resources
   SQ_Resources_investment <- c(vv(var_mean = SQ_Resources_investment, 
                              var_CV = var_slight, 
                              n = investment_months), rep(0,payout_months))
   
-  SQ_Resources_investment <- SQ_Resources_investment * SQ_safety
+  #SQ_Resources_investment <- SQ_Resources_investment * SQ_safety
   
   SQ_Resources_payout <- c(rep (0,investment_months),
                          vv(var_mean = SQ_Resources_payout, 
@@ -364,12 +364,10 @@ decision_function <- function(x, varnames){
            + Empowerment_Workforce_payout
            + Husband_Empowerment_Workforce_investment
   
-  PartB1 <- Empowerment_Resources_investment  
-  
-  PartB2 <- Education_investment + Economy_investment
+  PartB <- Empowerment_Resources_investment + Education_investment 
+            + Economy_investment
             + Empowerment_Workforce_investment
-  
-  PartB <- PartB1 + PartB2
+
   
   Empowerment_profit <-  (PartA - PartB)
   
