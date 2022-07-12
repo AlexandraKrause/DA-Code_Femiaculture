@@ -138,10 +138,6 @@ input_estimates <- input_estimates %>%
 decision_function <- function(x, varnames){
   
   #Risk
-  # safety_payout <- chance_event(safety_risk, 1, 0, n = payout_months, 
-  #                               one_draw =FALSE)
-  # safety_inv <- chance_event(safety_risk, 1, 0, n = investment_months,
-  #                            one_draw =FALSE)
   safety <- chance_event((1-safety_risk), 1, 0,
                          n = (payout_months + investment_months))
   SQ_safety <- chance_event((1-SQ_safety_risk), 1, 0,
@@ -454,8 +450,10 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
                                   vars = "NPV_decision_profit_with_Empowerment",
                                   method = 'boxplot_density')
 
-summary(mcSimulation_results$y$NPV_decision_profit_with_Empowerment)
+x1<-summary(mcSimulation_results$y$NPV_decision_profit_with_Empowerment)
 summary(mcSimulation_results$y$NPV_no_empowerment_branch)
+
+data.frame(unclass(x1), check.names = FALSE, stringsAsFactors = FALSE)
 
 ####Boxplots####
 
@@ -468,7 +466,8 @@ summary(mcSimulation_results$y$NPV_no_empowerment_branch)
 #'boxplot' empowerment pathway
 
 decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
-                      vars = c("NPV_decision_profit_with_Empowerment"
+                      vars = c("NPV_decision_profit_with_Empowerment",
+                               "NPV_no_empowerment_branch"
                                     ),
                                     method = 'boxplot', 
                                     base_size = 7)
