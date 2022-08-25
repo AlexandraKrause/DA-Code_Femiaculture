@@ -450,11 +450,6 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
                                   vars = "NPV_decision_profit_with_Empowerment",
                                   method = 'boxplot_density')
 
-x1<-summary(mcSimulation_results$y$NPV_decision_profit_with_Empowerment)
-summary(mcSimulation_results$y$NPV_no_empowerment_branch)
-
-data.frame(unclass(x1), check.names = FALSE, stringsAsFactors = FALSE)
-
 ####Boxplots####
 
 #By using the plot_distributions() function,
