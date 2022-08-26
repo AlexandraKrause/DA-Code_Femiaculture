@@ -172,7 +172,7 @@ decision_function <- function(x, varnames){
                              var_CV = var_slight, 
                              n = investment_months), rep(0,payout_months))
   
-  #SQ_Resources_investment <- SQ_Resources_investment * SQ_safety
+  #no safety risk: SQ_Resources_investment <- SQ_Resources_investment * SQ_safety
   
   SQ_Resources_payout <- c(rep (0,investment_months),
                          vv(var_mean = SQ_Resources_payout, 
@@ -187,6 +187,7 @@ decision_function <- function(x, varnames){
                                       var_CV = var_slight, 
                                       n = investment_months), 
                                       rep(0,payout_months))
+  #no safety risk
 
   Empowerment_Resources_payout <- c(rep (0,investment_months),
                                   vv(var_mean = Empowerment_Resources_payout, 
