@@ -168,6 +168,7 @@ decision_function <- function(x, varnames){
   Economy_investment <- Economy_investment * safety
 
   #Status Quo Resources
+  #Agricultural resources
   SQ_Resources_investment <- c(vv(var_mean = SQ_Resources_investment, 
                              var_CV = var_slight, 
                              n = investment_months), rep(0,payout_months))
@@ -182,6 +183,7 @@ decision_function <- function(x, varnames){
   SQ_Resources_payout <- SQ_Resources_payout * SQ_safety
   
   #Empowerment Resources
+  #Agricultural resources
   Empowerment_Resources_investment <- c(vv(var_mean = 
                                       Empowerment_Resources_investment, 
                                       var_CV = var_slight, 
@@ -288,7 +290,9 @@ decision_function <- function(x, varnames){
 #The risk is later applied to all elements independently. Social and 
 #inner-household pressure can occur at each step of empowerment,
 #ending the process. The entire pathway disrupts if the risk occurs.
-#The exclusion of this rule is investments into resources and the workforce.
+#The exclusion of this rule is investments into agricultural resources 
+#and the workforce(health care and nutritious food
+#resulting in increased work ability).
 #It is unclear if women might keep the resources for themselves and have to 
 #pay for their husbands to gather assets, but it is mostly seen
 #as safe to buy them.
@@ -328,7 +332,8 @@ decision_function <- function(x, varnames){
 #have for health care and food investments (= workforce investment).
 #A woman has no guarantee that her husband is paying for her food and health
 #care. So there is a risk to this. Also, there is no guarantee that she is
-#allowed to benefit from her investments in resources and healthcare 
+#allowed to benefit from her investments in 
+#agricultural resources and healthcare 
 #(workforce) or if she has to give the money to her husband for his own 
 #spending instead.
 #Investing in agricultural resources
