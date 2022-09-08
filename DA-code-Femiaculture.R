@@ -89,20 +89,6 @@ input_estimates <- input_estimates %>%
          label = as.character(label),
          Description = as.character(Description))
 
-#think of equak for unpaid work as lower as paid work,.....#
-
-#alternative code for using the excel sheet
-# input_table <-read_excel("scientists-given-prior-for-the-website_new.xlsx")
-# 
-# input_table <- input_table %>% 
-#   mutate(Description = as.character(Description),
-#          label = as.character(label),
-#          variable = as.character(variable),
-#          distribution = as.character(distribution),
-#          lower = as.numeric(lower),
-#          median = as.numeric(median),
-#         upper = as.numeric(upper))
-
 
 ####Explanation of the input estimates:####
 
@@ -173,7 +159,8 @@ decision_function <- function(x, varnames){
                              var_CV = var_slight, 
                              n = investment_months), rep(0,payout_months))
   
-  #no safety risk: SQ_Resources_investment <- SQ_Resources_investment * SQ_safety
+  #no safety risk:
+  #SQ_Resources_investment <- SQ_Resources_investment * SQ_safety
   
   SQ_Resources_payout <- c(rep (0,investment_months),
                          vv(var_mean = SQ_Resources_payout, 
@@ -183,7 +170,7 @@ decision_function <- function(x, varnames){
   SQ_Resources_payout <- SQ_Resources_payout * SQ_safety
   
   #Empowerment Resources
-  #Agricultural resources
+  #Agricultural Resources
   Empowerment_Resources_investment <- c(vv(var_mean = 
                                       Empowerment_Resources_investment, 
                                       var_CV = var_slight, 
@@ -198,7 +185,7 @@ decision_function <- function(x, varnames){
   
   Empowerment_Resources_payout <- Empowerment_Resources_payout * safety
   
-  #Status Quo monthly Workforce
+  #Status quo monthly Workforce
 
   
   SQ_Workforce_investment <- c( vv(var_mean = SQ_Workforce_investment, 
@@ -261,12 +248,11 @@ decision_function <- function(x, varnames){
 #on the years of investment and payouts, leading to a variable time series.
 #var_mean is set as the initial variable that differs by var_CV, the coefficient
 #of variation, which is set within the input parameters.
-#Its value is given in percentage.
 #n is the number of produced values, meaning the length of time for the
 #initial variable var_mean, for example, "SQ_Husband_Workforce_investment."
 #In this example, husbands also invest in their wives' health care and
 #food supply. The investment duration is calculated to be three months until
-#Empowerment pathway payouts can be expected. So, n, in this case, is
+#empowerment decision option payouts can be expected. So, n, in this case, is
 #"investment_months." The "Empowerment_Workforce_payout" variable, representing
 #the achieved outcome of the investment, on the other hand, contains
 #n = payout_months.
@@ -289,42 +275,36 @@ decision_function <- function(x, varnames){
 #estimates empowerment as too risky for women half of the time.
 #The risk is later applied to all elements independently. Social and 
 #inner-household pressure can occur at each step of empowerment,
-#ending the process. The entire pathway disrupts if the risk occurs.
+#ending the process. 
 #The exclusion of this rule is investments into agricultural resources 
-#and the workforce(health care and nutritious food
+#and the workforce (health care and nutritious food
 #resulting in increased work ability).
 #It is unclear if women might keep the resources for themselves and have to 
 #pay for their husbands to gather assets, but it is mostly seen
 #as safe to buy them.
-#Especially within the empowerment pathway, buying with her own money is 
+#Especially within the empowerment decision option, buying with her own money is 
 #considered safer than other parts of the model.
 
-#AQ_safety: The husband might take all income possibilities away
+##Risk explanation## 
+#The husband might take all income possibilities away
 #from the wive so that
 #she loses complete control over farm income.
 #The same risk occurs when the husband is not paying for 
 #her food or health care, including pregnancy care and contraceptives.
 #Especially in the case that she has some own land
 #and therefore some income he might not contribute.
-#Also, her own investments can be risky: A husband might not want her 
-#to buy seeds and grow nutritious food on his fields.
-#Also, women are hold back by society to give birth in a hospital
-#or get save abortions. A man might prevent her from contraceptive usage.
-  
-  
-####Pathway calculations####  
-###Computing the decision and status quo pathways###
-#1 existent Branch: Status quo pathway vs. empowerment pathway#
-  
-##Status Quo pathway##
-  
-  PartA <- SQ_Workforce_payout
-           + SQ_Resources_payout
-           + SQ_Husband_Workforce_investment
-  
-  PartB <- SQ_Resources_investment + SQ_Workforce_investment
 
-  Profit_SQ <- (PartA -PartB)
+   
+#Safety risks occur for all parts of payouts. 
+#Having her own money and not giving it to her husband or family might
+#also be a risk for violence. 
+  
+  
+#Husband's investment into the food and health care (workforce investment)
+#might be smaller within the empowerment decision option than the status quo
+#decision option. 
+#Also, like in the status quo scenario, it is not safe that the husband will
+#invest.
   
 #It can be dangerous to use the money for herself instead of the family.
 #Women might be dependent on their husbands for health care and food. 
@@ -336,30 +316,37 @@ decision_function <- function(x, varnames){
 #agricultural resources and healthcare 
 #(workforce) or if she has to give the money to her husband for his own 
 #spending instead.
+  
 #Investing in agricultural resources
 #itself might be seen as threatening by men in some situations,
 #but most literature describes it as a safe action,
 #since the husband can keep the bought resources fully or partly to himself.
-#Investments into resources like cattle can be done, but not always will the
-#woman be allowed to keep the payout. A cattle might be seen as her husband's 
-#income resource once it enters the farm. She might also be unable to
-#harvest her own crops if her husband's crops require labor.
 #In this scenario, it is seen as a safe action.
-#It also is unclear if the woman is allowed to invest in
-#health and additional food & nutrition supply. 
-#Investing demands the transport to a doctor, which can be dangerous or 
-#using land to plant nutritious plants, which her
-#husband might disapprove of. Therefore here it is calculated as a potentially
-#dangerous action.
+  
+  
+  
+####Decision Option calculations####  
+###Computing the empowerment and status quo decision options###
+#Status quo decision option compared to empowerment decision option#
+  
+##Status quo decision option##
+  
+  PartA <- SQ_Workforce_payout
+           + SQ_Resources_payout
+           + SQ_Husband_Workforce_investment
+  
+  PartB <- SQ_Resources_investment + SQ_Workforce_investment
 
+  Profit_SQ <- (PartA -PartB)
   
   
+
 #Computing the Status Quo NPV (Net present value)#
   
   NPV_no_empowerment_branch <- discount(Profit_SQ,
                             discount_rate = discount_rate, calculate_NPV = TRUE) 
   
-##Empowerment pathway##
+##Empowerment decision option##
   
   PartA <- Economy_payout
            + Empowerment_Resources_payout  
@@ -372,27 +359,7 @@ decision_function <- function(x, varnames){
 
   
   Empowerment_profit <-  (PartA - PartB)
-  
-##Risk explanation##  
-#Safety risks occur for all parts of payouts. 
-#Having her own money and not giving it to her husband or family might
-#also be a risk for violence. 
 
-
-#Husband's investment into the food and health care (workforce investment)
-#might be smaller within the empowerment pathway than the status quo. 
-#Also, like in the status quo scenario, it is not safe that the husband will
-#invest.
-
-#Investments into resources like cattle can be done without facing danger, 
-#but not always will 
-#the woman be allowed to keep the payout. A cattle might be seen as her 
-#husband's income resource once it enters the farm. She might also be unable to
-#harvest her own crops if her husband's crops require labor.
-#Investing in resources for herself can be threatening to her husband 
-#as well.
-#Investing into education and their economic opportunities might be 
-#dangerous since women are leaving their homes and duties for longer times.
 
   
 #Computing the Empowerment NPV (Net present value)#
@@ -435,7 +402,7 @@ mcSimulation_results <- decisionSupport::mcSimulation(
 #represents an overlay of the full results of the Monte Carlo simulation.
 #The x-axis shows the monetary range farm women can expect for either option.
 
-#Plot empowerment pathway
+#Plot empowerment decision option
 decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
                      vars = c("NPV_decision_profit_with_Empowerment" ),
                                     method = 'smooth_simple_overlay', 
@@ -464,7 +431,7 @@ decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results,
 #the 25th and 75th percentiles (sides of boxes) and any outliers 
 #(light circles outside of boxes).
 
-#'boxplot' empowerment pathway
+#'boxplot' empowerment decision option
 
 decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
                       vars = c("NPV_decision_profit_with_Empowerment",
@@ -527,7 +494,7 @@ Cashflow
 #The output is the determined Variable 
 #Importance in the Projection (VIP) score, shown in a bar graph, 
 #and coefficients of a Projection to Latent Structures (PLS) regression model.
-# The plots show the variables to which the model is more sensitive. These
+#The plots show the variables to which the model is more sensitive. These
 #variables have the most exaggerated impact on the decision outcome. 
 #Furthermore, they are the
 #most correlated with the outcome.
@@ -537,7 +504,7 @@ Cashflow
 #Red colors indicate negative values and green colors positive ones.
 #A positive value is not 
 #only positive compared to the baseline, but also 
-#is positively related to the outcome. Sane is valid for a negative value:
+#is positively related to the outcome. Same is valid for a negative value:
 #It is negative compared to the baseline and negatively related to the outcome.
 
 names(mcSimulation_results$x)
@@ -546,13 +513,14 @@ names(mcSimulation_results$y)
 #By using the existing input estimates,
 #Empowerment workforce payout (Dollar/Month),
 #the monetary value achieved by gathering money from the last step
-#of the empowerment pathway, the investments into health care and food
+#of the empowerment decision option, the investments into health care and food
 #which then lead to more working hours per month compared to doable
 #working hours with having less food and health care.
 #This is the most important variable in this decision scenario,
 #leading to higher payouts than investments. This variable has
 #positive importance to the outcome.
-#Concluding, the empowerment pathway in this scenario would be very beneficial.
+#Concluding, 
+#the empowerment decision option in this scenario would be very beneficial.
 #No negative value is shown in this plot.
 
 
@@ -581,7 +549,8 @@ plot_pls(pls_result_1, threshold = 0.8, input_table = input_estimates)
 #The Expected Value of Perfect Information analysis (EVPI) visualizes variables.
 #Further research could help make better-informed decisions in the
 #future. Farm women might benefit from reduced uncertainties of the plotted
-#variables since more perfect information benefits more informed decision-making.
+#variables since more perfect information benefits
+#more informed decision-making.
 #Without perfect information of the plotted variables, the farm women
 #might suffer from opportunity losses.
 
@@ -616,8 +585,6 @@ colnames(mcSimulation_results$y)
 ?plsr.mcSimulation
 ?stat_density
 ?plot_cashflow
-?var_CV
-?input$slider
 ?multi_EVPI
 ?vv()
 
